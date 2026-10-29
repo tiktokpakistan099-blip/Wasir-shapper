@@ -4,6 +4,9 @@
   w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script");n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
   ttq.load('DBCHVDBC77UFSQ3BR7NG');
   ttq.page();
+  // Load the second Pixel base code site-wide so TikTok Events Manager can detect it.
+  // Keep the existing Pixel and its current events unchanged.
+  ttq.load('DBHK2NRC77U4J2JQM250');
 }(window, document, 'ttq');
 </script>
 <!-- TikTok Pixel Code End -->
@@ -211,27 +214,7 @@ document.getElementById('orderForm').addEventListener('submit', function(e){
      price: price
    });
  }
- // NEW TikTok Pixel: fire Purchase only when the Thank You screen is shown.
- // The existing/old Pixel code and its CompletePayment event above are left unchanged.
- const newTikTokPixelId = 'DBHK2NRC77U4J2JQM250';
- if (!window.__waistShaperNewPixelPurchaseSent && window.ttq && typeof window.ttq.load === 'function' && typeof window.ttq.instance === 'function') {
-   window.__waistShaperNewPixelPurchaseSent = true;
-   try {
-     window.ttq.load(newTikTokPixelId);
-     window.ttq.instance(newTikTokPixelId).track('Purchase', {
-       value: total,
-       currency: 'PKR',
-       content_type: 'product',
-       content_id: 'waist-shaper',
-       content_name: 'Waist Shaper',
-       quantity: quantity,
-       price: price
-     });
-   } catch (pixelError) {
-     window.__waistShaperNewPixelPurchaseSent = false;
-     console.error('New TikTok Purchase Pixel error:', pixelError);
-   }
- }
+ // Purchase is configured in TikTok Events Manager using the /thank-you URL rule.
  document.body.style.overflow='';
  if (window.location.protocol === 'file:') { history.pushState({thankYou:true},'',window.location.pathname+'?thank_you=true'); } else { window.__waistShaperOriginalPath = window.location.pathname; history.pushState({thankYou:true},'', '/thank-you'); }
  window.scrollTo({top:0,behavior:'smooth'});
