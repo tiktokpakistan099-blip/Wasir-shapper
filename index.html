@@ -201,19 +201,7 @@ document.getElementById('orderForm').addEventListener('submit', function(e){
  if(footer) footer.style.display='none';
  if(processing) processing.style.display='none';
  if(thankYou) thankYou.style.display='flex';
- // TikTok conversion: count one completed order when the Thank You page is shown.
- if (!window.__waistShaperTikTokPurchaseSent && window.ttq && typeof window.ttq.track === 'function') {
-   window.__waistShaperTikTokPurchaseSent = true;
-   window.ttq.track('CompletePayment', {
-     value: total,
-     currency: 'PKR',
-     content_type: 'product',
-     content_id: 'waist-shaper',
-     content_name: 'Waist Shaper',
-     quantity: quantity,
-     price: price
-   });
- }
+ // Custom-code conversion event removed intentionally; keep the TikTok Events Manager Event Builder URL rule.
  // Purchase is configured in TikTok Events Manager using the /thank-you URL rule.
  document.body.style.overflow='';
  if (window.location.protocol === 'file:') { history.pushState({thankYou:true},'',window.location.pathname+'?thank_you=true'); } else { window.__waistShaperOriginalPath = window.location.pathname; history.pushState({thankYou:true},'', '/thank-you'); }
