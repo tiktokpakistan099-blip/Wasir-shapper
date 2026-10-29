@@ -211,6 +211,27 @@ document.getElementById('orderForm').addEventListener('submit', function(e){
      price: price
    });
  }
+ // NEW TikTok Pixel: fire Purchase only when the Thank You screen is shown.
+ // The existing/old Pixel code and its CompletePayment event above are left unchanged.
+ const newTikTokPixelId = 'DBHK2NRC77U4J2JQM250';
+ if (!window.__waistShaperNewPixelPurchaseSent && window.ttq && typeof window.ttq.load === 'function' && typeof window.ttq.instance === 'function') {
+   window.__waistShaperNewPixelPurchaseSent = true;
+   try {
+     window.ttq.load(newTikTokPixelId);
+     window.ttq.instance(newTikTokPixelId).track('Purchase', {
+       value: total,
+       currency: 'PKR',
+       content_type: 'product',
+       content_id: 'waist-shaper',
+       content_name: 'Waist Shaper',
+       quantity: quantity,
+       price: price
+     });
+   } catch (pixelError) {
+     window.__waistShaperNewPixelPurchaseSent = false;
+     console.error('New TikTok Purchase Pixel error:', pixelError);
+   }
+ }
  document.body.style.overflow='';
  if (window.location.protocol === 'file:') { history.pushState({thankYou:true},'',window.location.pathname+'?thank_you=true'); } else { window.__waistShaperOriginalPath = window.location.pathname; history.pushState({thankYou:true},'', '/thank-you'); }
  window.scrollTo({top:0,behavior:'smooth'});
@@ -235,7 +256,7 @@ if(backHome) backHome.addEventListener('click',function(e){
  const ty=document.getElementById('thankYouPage'); if(ty)ty.style.display='none';
  formReset(); history.pushState({},'',(window.__waistShaperOriginalPath || '/')); window.scrollTo({top:0,behavior:'smooth'});
 });
-function formReset(){const f=document.getElementById('orderForm');if(f)f.reset();waistOrderSubmitting=false;window.__waistShaperTikTokPurchaseSent=false;}
+function formReset(){const f=document.getElementById('orderForm');if(f)f.reset();waistOrderSubmitting=false;window.__waistShaperTikTokPurchaseSent=false;window.__waistShaperNewPixelPurchaseSent=false;}
 </script><script id="order-now-fix">
 document.addEventListener('click', function(e) {
  const btn = e.target.closest('a, button');
